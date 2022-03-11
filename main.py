@@ -54,7 +54,7 @@ hb = HomeBroker(broker_id,
                 on_close=on_close)  # cocos capital
 
 
-def init_process():
+def init_process(request):
     hb.auth.login(dni=dni, user=user, password=password, raise_exception=True)
     get_al30_quote()
     get_al30d_quote()
@@ -96,5 +96,5 @@ def get_gd30d_quote():
 
 
 if __name__ == '__main__':
-    result = init_process()
+    result = init_process(None)
     print(result)
