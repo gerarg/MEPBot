@@ -96,4 +96,5 @@ def get_gd30d_quote():
 
 
 if __name__ == '__main__':
-    print(init_process())
+    result = init_process()
+    print(result)
