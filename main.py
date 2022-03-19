@@ -2,6 +2,7 @@ import json
 import os
 
 from pyhomebroker import HomeBroker
+from pyhomebroker.common import SessionException
 
 
 def on_open(online):
@@ -51,15 +52,33 @@ hb = HomeBroker(broker_id,
                 on_personal_portfolio=on_personal_portfolio,
                 on_order_book=on_order_book,
                 on_error=on_error,
-                on_close=on_close)  # cocos capital
+                on_close=on_close)
+
+hb.auth.login(dni=dni, user=user, password=password, raise_exception=True)
+print('Succesfully logged')
 
 
 def init_process(request):
-    hb.auth.login(dni=dni, user=user, password=password, raise_exception=True)
-    get_al30_quote()
-    get_al30d_quote()
-    get_gd30_quote()
-    get_gd30d_quote()
+    try:
+        hb.online.connect()
+
+        get_al30_quote()
+        get_al30d_quote()
+        get_gd30_quote()
+        get_gd30d_quote()
+
+    except SessionException as ex:
+        hb.auth.login(dni=dni, user=user, password=password, raise_exception=True)
+
+        hb.online.connect()
+
+        hb.online.subscribe_personal_portfolio()
+
+        get_al30_quote()
+        get_al30d_quote()
+        get_gd30_quote()
+        get_gd30d_quote()
+
     return json.dumps(data)
 
 
