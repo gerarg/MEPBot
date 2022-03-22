@@ -1,3 +1,4 @@
 pyhomebroker
 requests
 websocket-client
+google-cloud-firestore
