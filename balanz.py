@@ -1,4 +1,6 @@
 import os
+import threading
+import time
 
 import requests
 import websocket
@@ -88,10 +90,19 @@ def get_quotes(request):
 
     wss_header = {'User-Agent': user_agent, 'Origin': 'https://clientes.balanz.com'}
 
+    websocket.setdefaulttimeout(30)
+
     wss = websocket.WebSocketApp(socket, on_message=on_message, on_open=on_open, on_error=on_error, on_close=on_close,
                                  header=wss_header)
 
-    wss.run_forever()
+    wst = threading.Thread(target=wss.run_forever)
+    wst.daemon = True
+    wst.start()
+
+    time.sleep(30)
+
+    if wss.keep_running:
+        wss.keep_running = False
 
     return json.dumps(data)
 

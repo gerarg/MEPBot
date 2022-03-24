@@ -60,8 +60,6 @@ print('Succesfully logged')
 
 def init_process(request):
     try:
-        hb.online.connect()
-
         get_al30_quote()
         get_al30d_quote()
         get_gd30_quote()
